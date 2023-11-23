@@ -1,32 +1,34 @@
 import user from "../model/user.model.js";
-import categories from "../model/categories.model.js";
+// import categories from "../model/categories.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
   try {
     const salt = bcrypt.genSaltSync(10);
     const hashedValue = bcrypt.hashSync(password, salt);
 
     const newUser = await user.create({
+      name: name,
       email: email,
       password: hashedValue,
     });
 
-    await categories.bulkCreate([
-      { name: 'Kitchen', userId: newUser.id },
-      { name: 'Laundry', userId: newUser.id },
-      { name: 'Toiletries', userId: newUser.id },
-      { name: 'Kids', userId: newUser.id }
-    ]);
+    // await categories.bulkCreate([
+    //   { name: 'Kitchen', userId: newUser.id },
+    //   { name: 'Laundry', userId: newUser.id },
+    //   { name: 'Toiletries', userId: newUser.id },
+    //   { name: 'Kids', userId: newUser.id }
+    // ]);
 
     res.status(200).json({
       message: "New user created",
       data: { email: newUser.email },
     });
   } catch (error) {
+    console.log(error)
     //   send res status 500 - server error
     res.status(500).json({ message: "Server error", error: error });
   }
@@ -44,7 +46,7 @@ const login = async (req, res) => {
 
     // No user return
     //   if user not found return 404
-    if (!user) {
+    if (!User) {
       res.status(404).json({ message: "user not found" });
       return;
     }
@@ -65,6 +67,8 @@ const login = async (req, res) => {
     }
 
   } catch (error) {
+    console.log(error)
+
     //   send res status 500 - server error
     res.status(500).json({ message: "Server error", error: error });
   }
@@ -151,6 +155,6 @@ const protectedController = (req, res) => {
   res.status(200).json({ message: "Protected route", data: { user: req.user } });
 };
 
-const authController = { register, login, publicController, protectedController, showUser, updatePassword };
+const authController = { register, login, publicController, protectedController/*, showUser, updatePassword*/ };
 
 export default authController;
