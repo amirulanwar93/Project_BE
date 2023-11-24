@@ -11,7 +11,7 @@ const newAlbums = async (req, res) => {
     });
     res.status(200).json({
       message: "New albums created",
-      data: { name: newalbums.name, id: newalbums.id/* , user: req.userId  */ },
+      data: { name: newalbums.name, id: newalbums.id, user: req.userId  },
     });
 
   } catch (error) {

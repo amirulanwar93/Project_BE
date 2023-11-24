@@ -1,7 +1,7 @@
 import { Router } from "express";
 import publicController from "../controllers/public.js";
 import authController from "../controllers/auth.js";
-// import isAuthenticated from "../middleware/isAuthenticated.js";
+import isAuthenticated from "../middleware/isAuthenticated.js";
 import albumsController from "../controllers/albums.js";
 // import itemsController from "../controllers/items.js";
 // import isCategoryOwner from "../middleware/isCategoryOwner.js";
