@@ -28,7 +28,7 @@ const register = async (req, res) => {
       data: { email: newUser.email },
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     //   send res status 500 - server error
     res.status(500).json({ message: "Server error", error: error });
   }
@@ -67,7 +67,7 @@ const login = async (req, res) => {
     }
 
   } catch (error) {
-    console.log(error)
+    console.log(error);
 
     //   send res status 500 - server error
     res.status(500).json({ message: "Server error", error: error });

@@ -22,4 +22,4 @@ const albums = postgresConnection.define(
   }
 );
 
-export default user;
+export default albums;
