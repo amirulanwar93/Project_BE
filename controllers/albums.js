@@ -12,7 +12,7 @@ const newAlbums = async (req, res) => {
       userId: req.userId,
       albumsName: albumsName,
       albumsDescription: albumsDescription,
-      imageUrl: newUpload.path.replace('public\\',''),
+      imageUrl: newUpload.path.replace('public\\', ''),
       fileId: newUpload.id
     });
     res.status(200).json({
@@ -55,7 +55,7 @@ const deleteAlbums = async (req, res) => {
 
         console.log("Delete File successfully.");
       });
-      
+
       await file.destroy({
         where: {
           id: album.fileId
@@ -103,7 +103,7 @@ const update = async (req, res) => {
 
     else {
       const newUpload = await file.create(req.file);
-      
+
       fs.unlink('public\\' + album.imageUrl, (err) => {
         if (err) {
           throw err;
@@ -159,7 +159,7 @@ const show = async (req, res) => {
 
     else {
 
-      res.status(200).json({ message: "albums found", data: { name: album.name, id: album.id } });
+      res.status(200).json({ message: "albums found", data: { name: album.albumsName, description: album.albumsDescription, id: album.id, imageUrl: album.imageUrl } });
       return;
 
     }
@@ -180,7 +180,7 @@ const listing = async (req, res) => {
       order: [
         ['updated_at', 'DESC'],
       ],
-      attributes: ['id', 'albumsName','imageUrl'],
+      attributes: ['id', 'albumsName', 'imageUrl', 'albumsDescription'],
       // include: items
     }));
 
