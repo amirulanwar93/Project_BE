@@ -1,25 +1,17 @@
 import { DataTypes } from "sequelize";
 import { postgresConnection } from "../database/connection.js";
 
-const albums = postgresConnection.define(
-  "albums",
+const pictures = postgresConnection.define(
+  "pictures",
   {
     // Model attributes are defined here
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    albumsName: {
+    imageUrl: {
       type: DataTypes.STRING,
       allowNull: false,
       after: 'id',
     },
-    albumsDescription: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    imageUrl: {
-      type: DataTypes.STRING,
+    albumId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     fileId: {
@@ -33,4 +25,4 @@ const albums = postgresConnection.define(
   }
 );
 
-export default albums;
+export default pictures;

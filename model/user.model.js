@@ -19,6 +19,14 @@ const user = postgresConnection.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    numberPhone: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    companyName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
   },
   {
     timestamps: true,

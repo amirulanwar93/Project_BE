@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, numberPhone, companyName } = req.body;
   try {
     const salt = bcrypt.genSaltSync(10);
     const hashedValue = bcrypt.hashSync(password, salt);
@@ -14,14 +14,9 @@ const register = async (req, res) => {
       name: name,
       email: email,
       password: hashedValue,
+      numberPhone: numberPhone,
+      companyName: companyName,
     });
-
-    // await categories.bulkCreate([
-    //   { name: 'Kitchen', userId: newUser.id },
-    //   { name: 'Laundry', userId: newUser.id },
-    //   { name: 'Toiletries', userId: newUser.id },
-    //   { name: 'Kids', userId: newUser.id }
-    // ]);
 
     res.status(200).json({
       message: "New user created",
@@ -68,7 +63,6 @@ const login = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-
     //   send res status 500 - server error
     res.status(500).json({ message: "Server error", error: error });
   }

@@ -1,20 +1,27 @@
 import albums from "../model/albums.model.js";
-// import items from "../model/items.model.js";
+import file from "../model/file.model.js";
+import fs from "fs";
+
 
 const newAlbums = async (req, res) => {
   const { albumsName, albumsDescription } = req.body;
 
   try {
+    const newUpload = await file.create(req.file);
     const newalbums = await albums.create({
+      userId: req.userId,
       albumsName: albumsName,
-      albumsDescription: albumsDescription
+      albumsDescription: albumsDescription,
+      imageUrl: newUpload.path.replace('public\\',''),
+      fileId: newUpload.id
     });
     res.status(200).json({
       message: "New albums created",
-      data: { name: newalbums.name, id: newalbums.id, user: req.userId  },
+      data: { name: newalbums.name, id: newalbums.id, user: req.userId },
     });
 
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Server error", error: error });
   }
 
@@ -25,7 +32,7 @@ const deleteAlbums = async (req, res) => {
 
   try {
     // query user based on name
-    const category = (await albums.findAll({
+    const album = (await albums.findAll({
       where: {
         id: req.params.id,
         userId: userId,
@@ -34,60 +41,98 @@ const deleteAlbums = async (req, res) => {
 
     // No name return
     //   if name not found return 404
-    if (!category) {
+    if (!album) {
       res.status(404).json({ message: "albums not found" });
       return;
 
     }
 
     else {
-      await category.destroy({
+      fs.unlink('public\\' + album.imageUrl, (err) => {
+        if (err) {
+          throw err;
+        }
+
+        console.log("Delete File successfully.");
+      });
+      
+      await file.destroy({
         where: {
-          id: albums.id
+          id: album.fileId
         },
       });
 
-      res.status(200).json({ message: "albums deleted", data: { name: category.name, id: category.id } });
+      await albums.destroy({
+        where: {
+          id: album.id
+        },
+      });
+
+
+      res.status(200).json({ message: "albums deleted", data: { name: album.name, id: album.id } });
       return;
 
     }
 
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Server error", error: error });
   }
 };
 
 const update = async (req, res) => {
-  const { name } = req.body;
+  const { albumsName, albumsDescription } = req.body;
   const userId = req.userId;
 
   try {
-    // query user based on name
-    const category = (await albums.findAll({
+    // query user based on albumsName
+    const album = (await albums.findAll({
       where: {
         id: req.params.id,
         userId: userId,
       },
     }))[0];
 
-    // No name return
-    //   if name not found return 404
-    if (!category) {
+    // No albumsName return
+    //   if albumsName not found return 404
+    if (!album) {
       res.status(404).json({ message: "albums not found" });
       return;
 
     }
 
     else {
-      // Change everyone without a last name to "Doe"
-      await category.update({ name: name });
+      const newUpload = await file.create(req.file);
+      
+      fs.unlink('public\\' + album.imageUrl, (err) => {
+        if (err) {
+          throw err;
+        }
 
-      res.status(200).json({ message: "new name for albums updated", data: { name: name, id: category.id } });
+        console.log("Delete File successfully.");
+      });
+
+      await file.destroy({
+        where: {
+          id: album.fileId
+        },
+      });
+
+      // Change everyone without a last albumsName to "Doe"
+      await album.update({
+        albumsName: albumsName,
+        albumsDescription: albumsDescription,
+        imageUrl: newUpload.path.replace('public\\', ''),
+        fileId: newUpload.id
+      });
+
+      res.status(200).json({ message: "new name for albums updated", data: { albumsName: albumsName, albumsDescription: albumsDescription, id: album.id } });
       return;
 
     }
 
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Server error", error: error });
   }
 };
@@ -97,7 +142,7 @@ const show = async (req, res) => {
 
   try {
     // query user based on name
-    const category = (await albums.findAll({
+    const album = (await albums.findAll({
       where: {
         id: req.params.id,
         userId: userId,
@@ -106,7 +151,7 @@ const show = async (req, res) => {
 
     // No name return
     //   if name not found return 404
-    if (!category) {
+    if (!album) {
       res.status(404).json({ message: "albums not found" });
       return;
 
@@ -114,7 +159,7 @@ const show = async (req, res) => {
 
     else {
 
-      res.status(200).json({ message: "albums found", data: { name: category.name, id: category.id } });
+      res.status(200).json({ message: "albums found", data: { name: album.name, id: album.id } });
       return;
 
     }
@@ -133,10 +178,10 @@ const listing = async (req, res) => {
         userId: userId,
       },
       order: [
-        ['name', 'ASC'],
+        ['updated_at', 'DESC'],
       ],
-      attributes: ['id', 'name'],
-      include: items
+      attributes: ['id', 'albumsName','imageUrl'],
+      // include: items
     }));
 
     res.status(200).json({ message: "albums found", data: data });
