@@ -22,14 +22,14 @@ apiRoutes.post("/login", authController.login);
 // apiRoutes.get("/protected", isAuthenticated, authController.protectedController);
 
 //api for albums
-apiRoutes.post("/albums/new", isAuthenticated, uploadPublic.single("image"), albumsController.newAlbums);
+apiRoutes.post("/albums/new", isAuthenticated, uploadPublic.single("file"), albumsController.newAlbums);
 apiRoutes.delete("/albums/delete/:id", isAuthenticated, albumsController.deleteAlbums);
-apiRoutes.put("/albums/update/:id", isAuthenticated, uploadPublic.single("image"), albumsController.update);
+apiRoutes.put("/albums/update/:id", isAuthenticated, uploadPublic.single("file"), albumsController.update);
 apiRoutes.get("/albums/show/:id", isAuthenticated, albumsController.show);
 apiRoutes.get("/albums/listing", isAuthenticated, albumsController.listing);
 
 // api for pictures
-apiRoutes.post("/albums/:album_id/pictures/upload", isAuthenticated, isAlbumOwner, uploadPublic.single("image"), picturesController.uploadPictures);
+apiRoutes.post("/albums/:album_id/pictures/upload", isAuthenticated, isAlbumOwner, uploadPublic.single("file"), picturesController.uploadPictures);
 apiRoutes.delete("/albums/:album_id/pictures/delete/:id", isAuthenticated, isAlbumOwner, picturesController.deletePictures);
 // apiRoutes.get("/albums/:album_id/pictures/show/:id", isAuthenticated, albumsController.show);
 apiRoutes.get("/albums/:album_id/pictures/listing", isAuthenticated, isAlbumOwner, picturesController.listingPictures);

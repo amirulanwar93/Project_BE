@@ -12,7 +12,7 @@ const newAlbums = async (req, res) => {
       userId: req.userId,
       albumsName: albumsName,
       albumsDescription: albumsDescription,
-      imageUrl: newUpload.path.replace('public\\', ''),
+      imageUrl: newUpload.path.replace('public', ''),
       fileId: newUpload.id
     });
     res.status(200).json({
