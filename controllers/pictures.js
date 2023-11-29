@@ -1,5 +1,5 @@
 import pictures from "../model/pictures.model.js";
-import albums from "../model/albums.model.js";
+
 import file from "../model/file.model.js";
 import fs from "fs";
 
