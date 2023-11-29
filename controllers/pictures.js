@@ -9,7 +9,7 @@ const uploadPictures = async (req, res) => {
     const newUpload = await file.create(req.file);
     const uploadPicture = await pictures.create({
       albumId: req.params.album_id,
-      imageUrl: newUpload.path.replace('public\\', ''),
+      imageUrl: newUpload.path.replace('public', ''),
       fileId: newUpload.id
     });
     res.status(200).json({
@@ -45,7 +45,7 @@ const deletePictures = async (req, res) => {
     }
 
     else {
-      fs.unlink('public\\' + picture.imageUrl, (err) => {
+      fs.unlink('public' + picture.imageUrl, (err) => {
         if (err) {
           throw err;
         }
