@@ -13,7 +13,6 @@ export const db = async () => {
     await pictures.sync({ alter: true });
     await file.sync({ alter: true });
   } catch (error) {
-    console.log(error);
     process.exit(1);
   }
 };

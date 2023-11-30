@@ -21,7 +21,6 @@ const newAlbums = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Server error", error: error });
   }
 
@@ -39,12 +38,10 @@ const deleteAlbums = async (req, res) => {
       },
     }))[0];
 
-    // No name return
-    //   if name not found return 404
+    // if albumsName not found return 404
     if (!album) {
       res.status(404).json({ message: "albums not found" });
       return;
-
     }
 
     else {
@@ -52,7 +49,6 @@ const deleteAlbums = async (req, res) => {
         if (err) {
           throw err;
         }
-
         console.log("Delete File successfully.");
       });
 
@@ -68,14 +64,10 @@ const deleteAlbums = async (req, res) => {
         },
       });
 
-
       res.status(200).json({ message: "albums deleted", data: { name: album.name, id: album.id } });
       return;
-
     }
-
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Server error", error: error });
   }
 };
@@ -93,8 +85,7 @@ const update = async (req, res) => {
       },
     }))[0];
 
-    // No albumsName return
-    //   if albumsName not found return 404
+    // if albumsName not found return 404
     if (!album) {
       res.status(404).json({ message: "albums not found" });
       return;
@@ -108,7 +99,6 @@ const update = async (req, res) => {
         if (err) {
           throw err;
         }
-
         console.log("Delete File successfully.");
       });
 
@@ -118,7 +108,6 @@ const update = async (req, res) => {
         },
       });
 
-      // Change everyone without a last albumsName to "Doe"
       await album.update({
         albumsName: albumsName,
         albumsDescription: albumsDescription,
@@ -128,11 +117,8 @@ const update = async (req, res) => {
 
       res.status(200).json({ message: "new name for albums updated", data: { albumsName: albumsName, albumsDescription: albumsDescription, id: album.id } });
       return;
-
     }
-
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Server error", error: error });
   }
 };
@@ -149,8 +135,7 @@ const show = async (req, res) => {
       },
     }))[0];
 
-    // No name return
-    //   if name not found return 404
+    // if albumsName not found return 404
     if (!album) {
       res.status(404).json({ message: "albums not found" });
       return;
@@ -158,10 +143,8 @@ const show = async (req, res) => {
     }
 
     else {
-
       res.status(200).json({ message: "albums found", data: { name: album.albumsName, description: album.albumsDescription, id: album.id, imageUrl: album.imageUrl } });
       return;
-
     }
 
   } catch (error) {
@@ -181,14 +164,12 @@ const listing = async (req, res) => {
         ['updated_at', 'DESC'],
       ],
       attributes: ['id', 'albumsName', 'imageUrl', 'albumsDescription'],
-      // include: items
     }));
 
     res.status(200).json({ message: "albums found", data: data });
 
     return;
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Server error", error: error });
   }
 };

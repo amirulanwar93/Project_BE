@@ -15,11 +15,6 @@ apiRoutes.post("/", publicController.post);
 // api for auth
 apiRoutes.post("/register", authController.register);
 apiRoutes.post("/login", authController.login);
-// Belum ada kat FE
-// apiRoutes.get("/show", isAuthenticated, authController.showUser);
-// apiRoutes.put("/update", isAuthenticated, authController.updatePassword);
-// apiRoutes.get("/public", authController.publicController);
-// apiRoutes.get("/protected", isAuthenticated, authController.protectedController);
 
 //api for albums
 apiRoutes.post("/albums/new", isAuthenticated, uploadPublic.single("file"), albumsController.newAlbums);
@@ -31,7 +26,6 @@ apiRoutes.get("/albums/listing", isAuthenticated, albumsController.listing);
 // api for pictures
 apiRoutes.post("/albums/:album_id/pictures/upload", isAuthenticated, isAlbumOwner, uploadPublic.single("file"), picturesController.uploadPictures);
 apiRoutes.delete("/albums/:album_id/pictures/delete/:id", isAuthenticated, isAlbumOwner, picturesController.deletePictures);
-// apiRoutes.get("/albums/:album_id/pictures/show/:id", isAuthenticated, albumsController.show);
 apiRoutes.get("/albums/:album_id/pictures/listing", isAuthenticated, isAlbumOwner, picturesController.listingPictures);
 
 export default apiRoutes;
