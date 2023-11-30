@@ -18,7 +18,6 @@ const uploadPictures = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Server error", error: error });
   }
 
@@ -36,8 +35,8 @@ const deletePictures = async (req, res) => {
       },
     }))[0];
 
-    // No name return
-    //   if name not found return 404
+
+    // if picture not found return 404
     if (!picture) {
       res.status(404).json({ message: "Pictures not found" });
       return;
@@ -71,43 +70,9 @@ const deletePictures = async (req, res) => {
     }
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Server error", error: error });
   }
 };
-
-// const showPictures = async (req, res) => {
-//   const albumId = req.params.album_id;
-
-//   try {
-//     // query user based on name
-//     const picture = (await pictures.findAll({
-//       where: {
-//         id: req.params.id,
-//         albumId: albumId,
-//       },
-//     }))[0];
-
-//     // No name return
-//     //   if name not found return 404
-//     if (!picture) {
-//       res.status(404).json({ message: "picture not found" });
-//       return;
-
-//     }
-
-//     else {
-
-//       res.status(200).json({ message: "picture found", data: { id: picture.id, albumId: picture.albumId } });
-//       return;
-
-//     }
-
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: "Server error", error: error });
-//   }
-// };
 
 const listingPictures = async (req, res) => {
   const albumId = req.params.album_id;
@@ -120,19 +85,18 @@ const listingPictures = async (req, res) => {
       order: [
         ['updated_at', 'DESC'],
       ],
-      attributes: ['id', 'albumId','fileId', 'imageUrl'],
-      // include: items
+      attributes: ['id', 'albumId', 'fileId', 'imageUrl'],
     }));
 
     res.status(200).json({ message: "albums found", data: data });
 
     return;
   } catch (error) {
-    console.log(error);
+    ;
     res.status(500).json({ message: "Server error", error: error });
   }
 };
 
-const albumsController = { uploadPictures, deletePictures, /* showPictures, */ listingPictures };
+const albumsController = { uploadPictures, deletePictures, listingPictures };
 
 export default albumsController;
